@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>재료 선택하기</title>
+</head>
+<body>
+    <h2>재료를 선택하세요:</h2>
+    <form id="ingredientForm">
+        {% for ingredient in ingredients %}
+            <input type="checkbox" name="ingredient" value="{{ ingredient }}">{{ ingredient }}<br>
+        {% endfor %}
+        <br>
+        <input type="button" value="선택 완료" onclick="submitIngredients()">
+    </form>
+    <h2>검색 결과:</h2>
+        {{table|safe}}
+    <div id="result"></div>
+
+    <script>
+        function submitIngredients() {
+            const formElement = document.getElementById('ingredientForm');
+            const formData = new FormData(formElement);
+
+            fetch('/select_ingredients', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                const resultElement = document.getElementById('result');
+                resultElement.innerHTML = data;
+            });
+        }
+    </script>
+</body>
+</html>
